@@ -5,21 +5,49 @@ use warnings;
 use Carp qw(croak carp);
 
 use App::Workflow::Lint;
+use Getopt::Long;
 
-#----------------------------------------------------------------------
-# CLI entry point
-#----------------------------------------------------------------------
+my $write = 0;
 
-my $file = shift @ARGV
-    or croak "Usage: workflow-lint <workflow.yml>";
+GetOptions(
+    'write' => \$write,
+);
+
+my $cmd  = shift @ARGV or croak "Usage: workflow-lint <check|fix> <file.yml> [--write]";
+my $file = shift @ARGV or croak "Usage: workflow-lint $cmd <file.yml> [--write]";
 
 my $lint = App::Workflow::Lint->new;
 
-my @results = $lint->check_file($file);
+if ($cmd eq 'check') {
+    my @results = $lint->check_file($file);
 
-for my $r (@results) {
-    printf "%s: %s (%s)\n",
-        $r->{level},
-        $r->{message},
-        $r->{rule};
+    for my $r (@results) {
+        printf "%s: %s (%s)\n",
+            $r->{level},
+            $r->{message},
+            $r->{rule};
+    }
+
+    exit(@results ? 1 : 0);
 }
+
+elsif ($cmd eq 'fix') {
+    my ($wf, $diags) = $lint->fix_file($file);
+
+    if ($write) {
+        $lint->{engine}->save_workflow($file, $wf);
+        print "Applied fixes and wrote updated workflow to $file\n";
+    }
+    else {
+        print "Fixes applied (not written). Use --write to save.\n";
+        my $yp = YAML::PP->new;
+        print $yp->dump_string($wf);
+    }
+
+    exit 0;
+}
+
+else {
+    croak "Unknown command '$cmd'";
+}
+
