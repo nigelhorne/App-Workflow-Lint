@@ -1,0 +1,25 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Carp qw(croak carp);
+
+use App::Workflow::Lint;
+
+#----------------------------------------------------------------------
+# CLI entry point
+#----------------------------------------------------------------------
+
+my $file = shift @ARGV
+    or croak "Usage: workflow-lint <workflow.yml>";
+
+my $lint = App::Workflow::Lint->new;
+
+my @results = $lint->check_file($file);
+
+for my $r (@results) {
+    printf "%s: %s (%s)\n",
+        $r->{level},
+        $r->{message},
+        $r->{rule};
+}

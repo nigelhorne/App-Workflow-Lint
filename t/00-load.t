@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::Most;
 
 use_ok('App::Workflow::Lint');
 use_ok('App::Workflow::Lint::Engine');

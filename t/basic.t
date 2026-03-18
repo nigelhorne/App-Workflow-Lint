@@ -1,11 +1,12 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::Most;
 
 use App::Workflow::Lint;
 
 my $lint = App::Workflow::Lint->new;
 
-ok($lint, 'constructor works');
+ok($lint, 'constructor returns an object');
 
 done_testing;
+
