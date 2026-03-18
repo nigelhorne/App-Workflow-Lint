@@ -28,7 +28,16 @@ YAML
 close $fh;
 
 # Run the CLI
-my $cmd = "$CLI check $filename";
+my $cmd;
+
+if ($^O eq 'MSWin32') {
+	# Windows cannot execute scripts directly
+	$cmd = qq{"$^X" "$CLI" check "$filename"};
+} else {
+	# Unix-like systems can run the script directly
+	$cmd = qq{"$CLI" check "$filename"};
+}
+
 my $output = qx{$cmd 2>&1};
 my $exit   = $? >> 8;
 
