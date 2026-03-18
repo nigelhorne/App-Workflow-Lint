@@ -6,6 +6,11 @@ use Carp qw(croak carp);
 
 use YAML::PP;
 use App::Workflow::Lint::Rule::MissingPermissions;
+use App::Workflow::Lint::Rule::MissingTimeout;
+use App::Workflow::Lint::Rule::UnpinnedActions;
+use App::Workflow::Lint::Rule::MissingConcurrency;
+use App::Workflow::Lint::Rule::DeprecatedSetEnv;
+use App::Workflow::Lint::Rule::MissingRunsOn;
 
 =head1 DESCRIPTION
 
@@ -45,8 +50,15 @@ sub load_workflow {
 sub rules {
     return (
         App::Workflow::Lint::Rule::MissingPermissions->new,
+        App::Workflow::Lint::Rule::MissingTimeout->new,
+        App::Workflow::Lint::Rule::UnpinnedActions->new,
+        App::Workflow::Lint::Rule::MissingConcurrency->new,
+        App::Workflow::Lint::Rule::DeprecatedSetEnv->new,
+        App::Workflow::Lint::Rule::MissingRunsOn->new,
     );
 }
+
+
 
 #----------------------------------------------------------------------
 # check_file($file)
