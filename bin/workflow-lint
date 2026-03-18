@@ -24,11 +24,9 @@ GetOptions(
 # Command + file arguments
 #----------------------------------------------------------------------
 
-my $cmd  = shift @ARGV
-    or croak "Usage: workflow-lint <check|fix> <file.yml> [--format json|sarif] [--write]\n";
+my $cmd  = shift @ARGV or croak "Usage: workflow-lint <check|fix> <file.yml> [--format json|sarif] [--write]";
 
-my $file = shift @ARGV
-    or croak "Usage: workflow-lint $cmd <file.yml> [--format json|sarif] [--write]\n";
+my $file = shift @ARGV or croak 'Usage: workflow-lint <check|fix> <file.yml> [--format json|sarif] [--write]';
 
 #----------------------------------------------------------------------
 # Create the linter object

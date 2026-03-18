@@ -28,4 +28,3 @@ sub load_yaml {
 }
 
 1;
-

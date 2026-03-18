@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Carp qw(croak carp);
 
-use YAML::XS qw(LoadFile DumpFile);
+use YAML::XS qw(DumpFile);
 use App::Workflow::Lint::YAML;
 use App::Workflow::Lint::Rule::MissingPermissions;
 use App::Workflow::Lint::Rule::MissingTimeout;
@@ -25,13 +25,21 @@ sub new {
 sub load_workflow {
     my ($self, $file) = @_;
 
-    my ($wf, $pos) = App::Workflow::Lint::YAML->load_with_positions($file);
+    # Read the YAML file
+    open my $fh, '<', $file
+        or croak "Cannot open workflow file '$file': $!";
+    local $/;
+    my $yaml_text = <$fh>;
+    close $fh;
 
+    # Load YAML (returns $data, $positions)
+    my ($wf, $pos) = App::Workflow::Lint::YAML->load_yaml($yaml_text);
+
+    # Store positions (empty hashref now)
     $self->{_positions}{$file} = $pos;
 
     return $wf;
 }
-
 
 #----------------------------------------------------------------------
 
