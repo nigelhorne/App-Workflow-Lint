@@ -4,50 +4,79 @@ use strict;
 use warnings;
 use Carp qw(croak carp);
 
-use App::Workflow::Lint;
 use Getopt::Long;
+use App::Workflow::Lint;
+use App::Workflow::Lint::Formatter;
 
-my $write = 0;
+#----------------------------------------------------------------------
+# Command-line options
+#----------------------------------------------------------------------
+
+my $write  = 0;          # Whether to write fixes back to disk
+my $format = 'human';    # Output format: human | json | sarif
 
 GetOptions(
-    'write' => \$write,
-);
+    'write'    => \$write,
+    'format=s' => \$format,
+) or croak "Invalid options. Usage: workflow-lint <check|fix> <file.yml> [--format json|sarif] [--write]\n";
 
-my $cmd  = shift @ARGV or croak "Usage: workflow-lint <check|fix> <file.yml> [--write]";
-my $file = shift @ARGV or croak "Usage: workflow-lint $cmd <file.yml> [--write]";
+#----------------------------------------------------------------------
+# Command + file arguments
+#----------------------------------------------------------------------
+
+my $cmd  = shift @ARGV
+    or croak "Usage: workflow-lint <check|fix> <file.yml> [--format json|sarif] [--write]\n";
+
+my $file = shift @ARGV
+    or croak "Usage: workflow-lint $cmd <file.yml> [--format json|sarif] [--write]\n";
+
+#----------------------------------------------------------------------
+# Create the linter object
+#----------------------------------------------------------------------
 
 my $lint = App::Workflow::Lint->new;
 
+#----------------------------------------------------------------------
+# CHECK MODE
+#----------------------------------------------------------------------
+
 if ($cmd eq 'check') {
+
     my @results = $lint->check_file($file);
 
-    for my $r (@results) {
-        printf "%s: %s (%s)\n",
-            $r->{level},
-            $r->{message},
-            $r->{rule};
-    }
+    # Format output using the formatter module
+    print App::Workflow::Lint::Formatter->format($format, \@results);
 
+    # Exit non-zero if any diagnostics were found
     exit(@results ? 1 : 0);
 }
 
+#----------------------------------------------------------------------
+# FIX MODE
+#----------------------------------------------------------------------
+
 elsif ($cmd eq 'fix') {
+
+    # fix_file returns: ($workflow_hashref, $diagnostics_arrayref)
     my ($wf, $diags) = $lint->fix_file($file);
 
     if ($write) {
+        # Write updated workflow back to disk
         $lint->{engine}->save_workflow($file, $wf);
         print "Applied fixes and wrote updated workflow to $file\n";
     }
     else {
         print "Fixes applied (not written). Use --write to save.\n";
-        my $yp = YAML::PP->new;
-        print $yp->dump_string($wf);
+        print App::Workflow::Lint::Formatter->format($format, $diags);
     }
 
     exit 0;
 }
 
-else {
-    croak "Unknown command '$cmd'";
-}
+#----------------------------------------------------------------------
+# Unknown command
+#----------------------------------------------------------------------
 
+else {
+    croak "Unknown command '$cmd'. Use 'check' or 'fix'.\n";
+}

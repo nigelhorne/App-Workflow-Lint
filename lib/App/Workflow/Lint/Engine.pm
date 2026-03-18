@@ -94,14 +94,14 @@ sub apply_fixes {
 #----------------------------------------------------------------------
 
 sub fix_file {
-    my ($self, $file) = @_;
+	my ($self, $file) = @_;
 
-    my $wf = $self->load_workflow($file);
-    my @diags = $self->check_file($file);
+	my $wf = $self->load_workflow($file);
+	my @diags = $self->check_file($file);
 
-    $self->apply_fixes($wf, @diags);
+	$self->apply_fixes($wf, @diags);
 
-    return ($wf, \@diags);
+	return ($wf, \@diags);
 }
 
 1;
