@@ -1,12 +1,17 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::Most;
 use File::Temp qw/tempfile/;
 
 my $CLI = 'bin/workflow-lint';
 
-ok( -x $CLI, "CLI script exists and is executable" )
-    or plan skip_all => "CLI script not found or not executable";
+ok( -f $CLI, "CLI script exists" ) or plan skip_all => "CLI script not found";
+
+ok( -r $CLI, "CLI script is readable" );
+SKIP: {
+	skip "Windows does not support -x", 1 if $^O eq 'MSWin32';
+	ok( -x $CLI, "CLI script is executable" );
+}
 
 # Create a temporary workflow file
 my ($fh, $filename) = tempfile();
@@ -35,5 +40,4 @@ like($output, qr/missing-permissions/i, "Output includes missing-permissions war
 like($output, qr/missing-timeout/i,     "Output includes missing-timeout warning");
 like($output, qr/missing-concurrency/i, "Output includes missing-concurrency info");
 
-done_testing;
-
+done_testing();
