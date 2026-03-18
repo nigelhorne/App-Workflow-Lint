@@ -24,8 +24,8 @@ use App::Workflow::Lint::Engine;
 # Constructor
 #----------------------------------------------------------------------
 sub new {
-    my ($class, %opts) = @_;
-    return bless { %opts }, $class;
+	my ($class, %opts) = @_;
+	return bless { %opts }, $class;
 }
 
 #----------------------------------------------------------------------
@@ -35,12 +35,11 @@ sub new {
 # runs all rules, and returns a list of diagnostics.
 #----------------------------------------------------------------------
 sub check_file {
-    my ($self, $file) = @_;
-    croak "check_file() requires a filename" unless defined $file;
+	my ($self, $file) = @_;
+	croak "check_file() requires a filename" unless defined $file;
 
-    my $engine = App::Workflow::Lint::Engine->new(%$self);
-    return $engine->check_file($file);
+	my $engine = App::Workflow::Lint::Engine->new(%$self);
+	return $engine->check_file($file);
 }
 
 1;
-

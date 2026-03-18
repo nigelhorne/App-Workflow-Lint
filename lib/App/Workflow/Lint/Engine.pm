@@ -5,6 +5,7 @@ use warnings;
 use Carp qw(croak carp);
 
 use YAML::XS qw(LoadFile DumpFile);
+use App::Workflow::Lint::YAML;
 use App::Workflow::Lint::Rule::MissingPermissions;
 use App::Workflow::Lint::Rule::MissingTimeout;
 use App::Workflow::Lint::Rule::UnpinnedActions;
@@ -23,13 +24,14 @@ sub new {
 
 sub load_workflow {
     my ($self, $file) = @_;
-    croak "No workflow file provided" unless defined $file;
 
-	my $wf = LoadFile($file);
-    croak "Failed to load workflow '$file': $@" if $@;
+    my ($wf, $pos) = App::Workflow::Lint::YAML->load_with_positions($file);
+
+    $self->{_positions}{$file} = $pos;
 
     return $wf;
 }
+
 
 #----------------------------------------------------------------------
 
@@ -103,5 +105,11 @@ sub fix_file {
 
 	return ($wf, \@diags);
 }
+
+sub line_for_path {
+	my ($self, $file, $path) = @_;
+	return $self->{_positions}{$file}{$path};
+}
+
 
 1;

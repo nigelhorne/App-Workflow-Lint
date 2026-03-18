@@ -29,7 +29,10 @@ sub applies_to  { 'workflow' }
 sub diag {
     my ($self, %args) = @_;
 
-    croak "diag() requires message" unless $args{message};
+    my $engine = $args{engine};
+    my $line   = $engine
+        ? $engine->line_for_path($args{file}, $args{path})
+        : undef;
 
     return {
         rule    => $self->id,
@@ -37,9 +40,11 @@ sub diag {
         message => $args{message},
         path    => $args{path} // '/',
         file    => $args{file},
-        fix     => $args{fix},   # optional coderef
+        line    => $line,
+        fix     => $args{fix},
     };
 }
+
 
 #----------------------------------------------------------------------
 # Scope-aware dispatcher
