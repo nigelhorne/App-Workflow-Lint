@@ -1,3 +1,5 @@
-0.01  2026-03-17
-    - Initial release skeleton.
-    - Basic engine, rule system, CLI, and first rule.
+Revision history for App-Workflow-Lint - Linter for GitHub Actions workflow files
+
+0.01	Wed Mar 18 08:42:06 EDT 2026
+	- Initial release skeleton.
+	- Basic engine, rule system, CLI, and first rule.

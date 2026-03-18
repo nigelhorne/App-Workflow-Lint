@@ -1,5 +1,6 @@
 bin/workflow-lint
 Changes
+cpanfile
 lib/App/Workflow/Lint.pm
 lib/App/Workflow/Lint/Engine.pm
 lib/App/Workflow/Lint/Formatter.pm
@@ -22,5 +23,4 @@ t/cli.t
 t/dsl.t
 t/eof.t
 t/eol.t
-t/line-numbers.t
 t/output_formats.t
