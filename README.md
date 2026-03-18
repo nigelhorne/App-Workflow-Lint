@@ -59,10 +59,7 @@ things to happen.
 
 # SEE ALSO
 
-- [Test Dashboard](https://nigelhorne.github.io/App-Workflow-Lint/coverage/)
-- [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure)
-- [HTTP::BrowserDetect](https://metacpan.org/pod/HTTP%3A%3ABrowserDetect)
-- [https://github.com/mitchellkrogza/apache-ultimate-bad-bot-blocker](https://github.com/mitchellkrogza/apache-ultimate-bad-bot-blocker)
+- [App::Test::Generator](https://metacpan.org/pod/App%3A%3ATest%3A%3AGenerator)
 
 # REPOSITORY
 

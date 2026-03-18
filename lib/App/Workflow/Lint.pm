@@ -96,13 +96,7 @@ things to happen.
 
 =over 4
 
-=item * L<Test Dashboard|https://nigelhorne.github.io/App-Workflow-Lint/coverage/>
-
-=item * L<Object::Configure>
-
-=item * L<HTTP::BrowserDetect>
-
-=item * L<https://github.com/mitchellkrogza/apache-ultimate-bad-bot-blocker>
+=item * L<App::Test::Generator>
 
 =back
 
