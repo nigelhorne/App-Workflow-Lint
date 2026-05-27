@@ -2,6 +2,7 @@ package App::Workflow::Lint::YAML;
 
 use strict;
 use warnings;
+use Carp qw(croak);
 use YAML::PP;
 
 =head1 NAME
@@ -51,7 +52,8 @@ sub load_yaml {
     my ($class, $yaml_text) = @_;
 
     my $ypp = YAML::PP->new;
-    my $data = $ypp->load_string($yaml_text);
+    my $data = eval { $ypp->load_string($yaml_text) };
+    croak "YAML parse error: $@" if $@;
 
     # No line numbers available → return empty map
     my %positions;

@@ -1,5 +1,25 @@
 Revision history for App-Workflow-Lint - Linter for GitHub Actions workflow files
 
+0.02
+	[ Bug Fixes]
+
+	- Fix: add missing fix_file() method to App::Workflow::Lint facade.
+	- Fix: Engine::fix_file now loads the workflow once and runs rules against
+	  that single copy, so fix closures operate on the same structure that is
+	  returned to the caller.
+	- Fix: bin/workflow-lint --write now works; fix_file stores the engine on
+	  $self so save_workflow() is reachable.
+	- Fix: malformed YAML no longer crashes with a raw stack trace; YAML.pm
+	  wraps load_string in eval and croaks with a clean message.
+	- Fix: Rule dispatcher no longer dies on jobs: [] or steps: "scalar";
+	  added ref-type guards before iterating jobs and steps.
+	- Fix: MissingPermissions now uses check_workflow() and $self->diag()
+	  instead of overriding check() and hand-rolling an incomplete hashref.
+	- Fix: Formatter::_format_human returns empty string (not "\n") when
+	  there are no diagnostics.
+	- Fix: UnpinnedActions unsafe-tag regex is now case-insensitive (/i),
+	  catching @Master, @MAIN, etc.
+
 0.01	Wed Mar 18 08:42:06 EDT 2026
 	- Initial release skeleton.
 	- Basic engine, rule system, CLI, and first rule.

@@ -36,6 +36,7 @@ inc/
 /*.zip
 *.swp
 .DS_Store
+CLAUDE.md
 
 # Carton/Carmel
 /local/

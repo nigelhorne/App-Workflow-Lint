@@ -60,18 +60,24 @@ sub check {
     }
     elsif ($scope eq 'job') {
         my @out;
-        for my $job_name (keys %{ $wf->{jobs} // {} }) {
-            my $job = $wf->{jobs}{$job_name};
+        my $jobs = $wf->{jobs};
+        return @out unless defined $jobs && ref $jobs eq 'HASH';
+        for my $job_name (keys %$jobs) {
+            my $job = $jobs->{$job_name};
             push @out, $self->check_job($job, { %$ctx, job_name => $job_name });
         }
         return @out;
     }
     elsif ($scope eq 'step') {
         my @out;
-        for my $job_name (keys %{ $wf->{jobs} // {} }) {
-            my $job = $wf->{jobs}{$job_name};
-            for my $i (0 .. $#{ $job->{steps} // [] }) {
-                my $step = $job->{steps}[$i];
+        my $jobs = $wf->{jobs};
+        return @out unless defined $jobs && ref $jobs eq 'HASH';
+        for my $job_name (keys %$jobs) {
+            my $job = $jobs->{$job_name};
+            my $steps = $job->{steps};
+            next unless defined $steps && ref $steps eq 'ARRAY';
+            for my $i (0 .. $#$steps) {
+                my $step = $steps->[$i];
                 push @out, $self->check_step($step, {
                     %$ctx,
                     job_name   => $job_name,

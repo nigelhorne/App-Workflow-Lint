@@ -78,6 +78,14 @@ sub check_file {
 	return $engine->check_file($file);
 }
 
+sub fix_file {
+	my ($self, $file) = @_;
+	croak "fix_file() requires a filename" unless defined $file;
+
+	$self->{engine} = App::Workflow::Lint::Engine->new(%$self);
+	return $self->{engine}->fix_file($file);
+}
+
 =head1 AUTHOR
 
 Nigel Horne, C<< <njh at nigelhorne.com> >>

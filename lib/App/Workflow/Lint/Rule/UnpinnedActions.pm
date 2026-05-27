@@ -29,7 +29,7 @@ sub check_step {
         message => "Action '$uses' uses an unsafe tag",
         path    => "/jobs/$ctx->{job_name}/steps/$ctx->{step_index}",
         file    => $ctx->{file},
-    ) if $uses =~ /\@(master|main|latest)$/;
+    ) if $uses =~ /\@(master|main|latest)$/i;
 
     return ();
 }

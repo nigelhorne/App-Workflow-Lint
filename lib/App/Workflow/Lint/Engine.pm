@@ -185,7 +185,11 @@ sub fix_file {
 	my ($self, $file) = @_;
 
 	my $wf = $self->load_workflow($file);
-	my @diags = $self->check_file($file);
+	my @diags;
+	for my $rule ($self->rules) {
+		my @r = $rule->check($wf, { file => $file });
+		push @diags, @r if @r;
+	}
 
 	$self->apply_fixes($wf, @diags);
 
