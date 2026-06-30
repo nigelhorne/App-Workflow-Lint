@@ -92,14 +92,6 @@ Nigel Horne, C<< <njh at nigelhorne.com> >>
 
 =head1 BUGS
 
-is_tablet() only currently detects the iPad and Windows PCs. Android strings
-don't differ between tablets and smartphones.
-
-params() returns a ref which means that calling routines can change the hash
-for other routines.
-Take a local copy before making amendments to the table if you don't want unexpected
-things to happen.
-
 =head1 SEE ALSO
 
 =over 4
